@@ -144,38 +144,50 @@ if ( ! class_exists( 'WC_InvoiceFox' ) ) {
 		}
 
 		function process_custom_order_action_invoice( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 				$this->_make_document_in_invoicefox( $order, "invoice_draft" );
 			}
 
 		}
 
 		function process_custom_order_action_proforma( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
+				$orderobj = new WC_Order( $order);
+
 				$this->_make_document_in_invoicefox( $order, "proforma" );
 			}
 		}
 
 		function process_custom_order_action_invt_sale( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			if($orderobj->get_payment_method() === 'stripe'){
 				$this->_make_document_in_invoicefox( $order, "inventory" );
 			}
 		}
 
 		function process_custom_order_action_full_invoice( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 				$this->_make_document_in_invoicefox( $order, "invoice_complete" );
 			}
 		}
 
 		function process_invoice_download( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 				$this->_woocommerce_order_invoice_pdf( $order );
 			}
 		}
 
 		function process_custom_order_action_mark_invoice_paid( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 				$api = new InvfoxAPI( $this->conf['api_key'], $this->conf['api_domain'], true );
 				$api->setDebugHook( "woocomm_invfox__trace" );
 				$api->markInvoicePaid( $order->id );
@@ -188,7 +200,9 @@ if ( ! class_exists( 'WC_InvoiceFox' ) ) {
 		}
 
 		function process_custom_order_action_check_invt_items( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 			
 			
 
@@ -226,7 +240,9 @@ if ( ! class_exists( 'WC_InvoiceFox' ) ) {
 		}
 
 		function _woocommerce_order_status_processing( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			error_log($order);
+			$orderobj = new WC_Order( $order);
+			if($orderobj->get_payment_method() === 'stripe'){
 				if ( $this->conf['on_order_processing'] == "create_invoice_draft" ) {
 					$this->_make_document_in_invoicefox( $order, 'invoice_draft' );
 				}
@@ -236,7 +252,9 @@ if ( ! class_exists( 'WC_InvoiceFox' ) ) {
 
 
 		function _woocommerce_order_status_completed( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 
 			
 			if ( $this->conf['on_order_completed'] == "create_invoice_draft" ) {
@@ -523,7 +541,9 @@ if ( ! class_exists( 'WC_InvoiceFox' ) ) {
 		 * function that downloads pdf
 		 */
 		function _woocommerce_order_invoice_pdf( $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 				woocomm_invfox__trace( "================ BEGIN PDF DOWNLOAD ===============" );
 
 				$api = new InvfoxAPI( $this->conf['api_key'], $this->conf['api_domain'], true );
@@ -542,7 +562,9 @@ if ( ! class_exists( 'WC_InvoiceFox' ) ) {
 		}
 
 		function _attach_invoice_pdf_to_email( $attachments, $status, $order ) {
-			if($order->get_payment_method() === 'stripe'){
+			$orderobj = new WC_Order( $order);
+
+			if($orderobj->get_payment_method() === 'stripe'){
 
 			if ( $this->conf['on_order_completed'] == "create_invoice_complete_email" ||
 			     $this->conf['on_order_completed'] == "email" ) {
